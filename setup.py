@@ -36,7 +36,7 @@ with open(os.path.join('gpsdio_csv', '__init__.py')) as f:
             break
 
 
-setup_args = dict(
+setup(
     author=author,
     author_email=email,
     classifiers=[
@@ -55,7 +55,7 @@ setup_args = dict(
     ],
     description="A driver plugin for gpsdio that reads and writes messages in CSV format.",
     entry_points='''
-        [gpsdio.gpsdio_plugins]
+        [gpsdio.drivers]
         csv=gpsdio_csv.core:gpsdio_csv
     ''',
     extras_require={
@@ -63,7 +63,7 @@ setup_args = dict(
     },
     include_package_data=True,
     install_requires=[
-        'gpsdio>=0.0.2'
+        'gpsdio>=0.0.7'
     ],
     keywords='AIS GIS remote sensing csv',
     license=license,
@@ -74,6 +74,3 @@ setup_args = dict(
     version=version,
     zip_safe=True
 )
-
-
-setup(**setup_args)

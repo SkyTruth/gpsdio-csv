@@ -6,13 +6,14 @@ Core components for gpsdio_csv
 """
 
 
-import gpsdio.drivers
+import gpsdio.base
 import csv
 import json
 import six
 from codecs import open as codecs_open
 
-class Csv(gpsdio.drivers.BaseDriver):
+
+class Csv(gpsdio.base.BaseDriver):
     """ A driver for CSV files.
 
     A column list hould be specified when writing. The default column
@@ -24,19 +25,18 @@ class Csv(gpsdio.drivers.BaseDriver):
     JSON object is unpacked and incorporated into the message.
     """
 
-
     driver_name = 'CSV'
     extensions = ('csv',)
-    modes = ('r', 'w')
+    io_modes = ('r', 'w')
     compression = False
 
     # Default columns to write
     cols = ["type", "mmsi", "timestamp", "lon", "lat", "heading", "turn", "course", "speed", "extra"]
 
     class _CsvWriter(object):
-        def __init__(self, f, cols=[], **kwargs):
+        def __init__(self, f, cols=None, **kwargs):
             self._f = f
-            self._cols = cols
+            self._cols = cols or []
             self._writer = csv.DictWriter(f, cols)
             self._writer.writeheader()
 
@@ -74,7 +74,7 @@ class Csv(gpsdio.drivers.BaseDriver):
         def __getattr__(self, item):
             return getattr(self._f, item)
 
-    def __init__(self, f, mode='r', cols=None, **kwargs):
+    def open(self, f, mode='r', cols=None, **kwargs):
         """Arguments:
 
             f: An open file object to read or write to/from
@@ -89,7 +89,10 @@ class Csv(gpsdio.drivers.BaseDriver):
         if cols is None:
             cols = self.cols
         if mode == 'r':
-            driver = self._CsvReader(self._f, **kwargs)
+            return self._CsvReader(self._f, **kwargs)
         else:
-            driver = self._CsvWriter(self._f, cols, **kwargs)
-        gpsdio.drivers.BaseDriver.__init__(self, driver)
+            return self._CsvWriter(self._f, cols, **kwargs)
+
+# Plugin main function that does nothing
+def gpsdio_csv(*arg, **kw):
+    pass
