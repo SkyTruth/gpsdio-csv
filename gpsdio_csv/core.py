@@ -93,3 +93,7 @@ class Csv(gpsdio.drivers.BaseDriver):
         else:
             driver = self._CsvWriter(self._f, cols, **kwargs)
         gpsdio.drivers.BaseDriver.__init__(self, driver)
+
+# Plugin main function that does nothing
+def gpsdio_csv(*arg, **kw):
+    pass
