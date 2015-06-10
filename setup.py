@@ -55,7 +55,7 @@ setup_args = dict(
     ],
     description="A driver plugin for gpsdio that reads and writes messages in CSV format.",
     entry_points='''
-        [gpsdio.gpsdio_plugins]
+        [gpsdio.drivers]
         csv=gpsdio_csv.core:gpsdio_csv
     ''',
     extras_require={
