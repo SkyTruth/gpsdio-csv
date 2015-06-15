@@ -17,10 +17,14 @@ class Csv(gpsdio.drivers.BaseDriver):
 
     Arguments:
 
-    cols="colname1,colname2...,colnameN"
+        cols="colname1,colname2...,colnameN"
 
     "cols" is the list of columns to add to the CSV file when writing.
     The default column list is available in Csv.cols.
+
+    Default value for cols is
+
+        type,mmsi,timestamp,lon,lat,heading,turn,course,speed,extra
 
     If a column called "extra" is specified when writing, any columns
     not in the column list will be put in a JSON object serialized
