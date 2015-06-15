@@ -45,7 +45,7 @@ class Csv(gpsdio.drivers.BaseDriver):
         def __init__(self, f, cols=[], **kwargs):
             self._f = f
             self._cols = cols
-            self._writer = csv.DictWriter(f, cols)
+            self._writer = csv.DictWriter(f, cols, **kwargs)
             self._writer.writeheader()
 
         def convert_row(self, row):
