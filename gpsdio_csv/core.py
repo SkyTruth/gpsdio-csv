@@ -16,11 +16,19 @@ from codecs import open as codecs_open
 class Csv(gpsdio.base.BaseDriver):
     """ A driver for CSV files.
 
-    A column list hould be specified when writing. The default column
-    list is available in Csv.cols.
+    Arguments:
 
-    If a column called "extra" is specified when writing any columns
-    not in the column list, will be put in a JSON object serialized
+        cols="colname1,colname2...,colnameN"
+
+    "cols" is the list of columns to add to the CSV file when writing.
+    The default column list is available in Csv.cols.
+
+    Default value for cols is
+
+        type,mmsi,timestamp,lon,lat,heading,turn,course,speed,extra
+
+    If a column called "extra" is specified when writing, any columns
+    not in the column list will be put in a JSON object serialized
     into that column. If such a column is present when reading the
     JSON object is unpacked and incorporated into the message.
     """
@@ -36,8 +44,8 @@ class Csv(gpsdio.base.BaseDriver):
     class _CsvWriter(object):
         def __init__(self, f, cols=None, **kwargs):
             self._f = f
-            self._cols = cols or []
-            self._writer = csv.DictWriter(f, cols)
+            self._cols = cols
+            self._writer = csv.DictWriter(f, cols, **kwargs)
             self._writer.writeheader()
 
         def convert_row(self, row):
@@ -82,6 +90,8 @@ class Csv(gpsdio.base.BaseDriver):
             cols: a list of column names (as strings) to write
         """ 
 
+        if isinstance(cols, six.string_types):
+            cols = cols.split(",")
         if isinstance(f, six.string_types):
             self._f = codecs_open(f, mode=mode)
         else:
